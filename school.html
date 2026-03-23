@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Semester Question Answer PDF Website</title>
+
+<style>
+body {font-family: Arial; margin:0; background:#eef2f7}
+header {background:#1e3a5f; color:white; padding:20px; text-align:center}
+nav {background:#2c5282; text-align:center; padding:10px}
+nav a {color:white; margin:10px; text-decoration:none; font-weight:bold}
+.container {padding:20px}
+.card {background:white; padding:20px; margin:15px 0; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+button {padding:10px; background:#2b6cb0; color:white; border:none; border-radius:6px; cursor:pointer}
+button:hover {background:#2c5282}
+input, select {padding:10px; margin:5px 0; width:100%}
+h2 {margin-top:0}
+</style>
+</head>
+
+<body>
+
+<header>
+  <b><h1>📚 All Semester Important Question Answer PDF</h1></b>
+  <h2>Contact me at: <a href="mailto:bagidmostafa@gmail.com">bagidmostafa@gmail</a></h2>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#notes">Notes</a>
+  <a href="#upload">Upload</a>
+</nav>
+
+<!-- HOME -->
+<div class="container" id="home">
+  <div class="card">
+    <h2>About Website</h2>
+    <i><p>This website provides semester-wise and subject-wise college question papers and answers in PDF format.</p></i>
+  </div>
+
+  <div class="card">
+    <h2>📚 Available Semesters</h2>
+    <ul>
+      <li>1st Semester</li>
+      <li>2nd Semester</li>
+      <li>3rd Semester</li>
+      <li>4th Semester</li>
+      <li>5th Semester</li>
+      <li>6th Semester</li>
+    </ul>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="container" id="notes">
+  <h2>📥 Download Notes</h2>
+
+  <input type="text" id="search" placeholder="Search subject, semester or title" onkeyup="searchNotes()">
+
+  <select id="semesterFilter" onchange="filterAll()">
+    <option value="all">All Semesters</option>
+    <option value="1st">1st Semester</option>
+    <option value="2nd">2nd Semester</option>
+    <option value="3rd">3rd Semester</option>
+    <option value="4th">4th Semester</option>
+    <option value="5th">5th Semester</option>
+    <option value="6th">6th Semester</option>
+  </select>
+
+  <select id="categoryFilter" onchange="filterAll()">
+    <option value="all">All Subjects</option>
+    <option value="History">History</option>
+    <option value="Economics">Economics</option>
+    <option value="AEC">AEC</option>
+    <option value="MDC">MDC</option>
+    <option value="SEC">SEC</option>
+  </select>
+
+  <div id="notesList"></div>
+</div>
+
+<!-- UPLOAD -->
+<div class="container" id="upload">
+  <h2>📤 Upload Question Answer PDF</h2>
+
+  <input type="file" id="fileInput" accept="application/pdf">
+  <input type="text" id="title" placeholder="Enter Title (e.g. BA 3rd Sem History 2023)">
+
+  <select id="semester">
+    <option>1st</option>
+    <option>2nd</option>
+    <option>3rd</option>
+    <option>4th</option>
+    <option>5th</option>
+    <option>6th</option>
+  </select>
+
+  <select id="category">
+    <option>History</option>
+    <option>Economics</option>
+    <option>AEC</option>
+    <option>MDC</option>
+    <option>VAC</option>
+	<option>SEC</option>
+	
+  </select>
+
+  <button onclick="uploadFile()">Upload</button>
+</div>
+
+<script>
+let notes = [];
+
+function uploadFile() {
+  const file = document.getElementById('fileInput').files[0];
+  const title = document.getElementById('title').value;
+  const category = document.getElementById('category').value;
+  const semester = document.getElementById('semester').value;
+
+  if (!file || !title) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  const url = URL.createObjectURL(file);
+  notes.push({title, url, category, semester});
+
+  displayNotes();
+}
+
+function displayNotes(filtered = notes) {
+  const list = document.getElementById('notesList');
+  list.innerHTML = '';
+
+  filtered.forEach(n => {
+    list.innerHTML += `
+      <div class="card">
+        <h3>${n.title}</h3>
+        <p>Semester: ${n.semester} | Subject: ${n.category}</p>
+        <a href="${n.url}" download>
+          <button>Download PDF</button>
+        </a>
+      </div>
+    `;
+  });
+}
+
+function searchNotes() {
+  const value = document.getElementById('search').value.toLowerCase();
+  const filtered = notes.filter(n =>
+    n.title.toLowerCase().includes(value) ||
+    n.category.toLowerCase().includes(value) ||
+    n.semester.toLowerCase().includes(value)
+  );
+  displayNotes(filtered);
+}
+
+function filterAll() {
+  const sem = document.getElementById('semesterFilter').value;
+  const cat = document.getElementById('categoryFilter').value;
+
+  let filtered = notes;
+
+  if (sem !== 'all') {
+    filtered = filtered.filter(n => n.semester === sem);
+  }
+
+  if (cat !== 'all') {
+    filtered = filtered.filter(n => n.category === cat);
+  }
+
+  displayNotes(filtered);
+}
+</script>
+
+</body>
+</html>
